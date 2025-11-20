@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
-  const CustomTextFormField({super.key, required this.label});
+  const CustomTextFormField({
+    super.key,
+    required this.label,
+    required this.controller,
+  });
 
   final String label;
+  final TextEditingController controller;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();

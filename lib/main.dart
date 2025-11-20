@@ -1,11 +1,17 @@
-import 'package:connex_chat/view/login.dart';
-import 'package:connex_chat/view/splash.dart';
+import 'package:connex_chat/view/s_home.dart';
+import 'package:connex_chat/view/s_login.dart';
+import 'package:connex_chat/view/s_splash.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(
     MaterialApp(
-      home: SplashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(),
+      },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'lex',

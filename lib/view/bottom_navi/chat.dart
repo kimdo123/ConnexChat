@@ -1,0 +1,178 @@
+import 'package:connex_chat/utils/util.dart';
+import 'package:connex_chat/widget/s_popup.dart';
+import 'package:flutter/material.dart';
+
+class Chat extends StatefulWidget {
+  const Chat({super.key});
+
+  @override
+  State<Chat> createState() => _ChatState();
+}
+
+class _ChatState extends State<Chat> {
+  bool channel = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.deepPurple,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 100,
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.all(20),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 10),
+                        // TODO API
+                        Text(
+                          '채팅방 목록',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Expanded(child: SizedBox()),
+                        // TODO 다이얼로그
+                        GestureDetector(
+                          onTap: () => openDialog(context),
+                          child: Utils.svg('chat_plus', 30, Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(40),
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.fromLTRB(30, 30, 0, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              spacing: 10,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      channel = !channel;
+                                    });
+                                  },
+                                  child: Text(
+                                    '사내 전체 공지',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: channel
+                                          ? Colors.deepPurple
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      channel = !channel;
+                                    });
+                                  },
+                                  child: Text(
+                                    '개발팀',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: channel
+                                          ? Colors.black
+                                          : Colors.deepPurple,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 300,
+                              height: 500,
+                              child: channel
+                                  ? ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsetsGeometry.only(top: 10),
+                                          child: ChatingRoom(),
+                                        );
+                                      },
+                                      // TODO API 채팅방 수
+                                      itemCount: 5,
+                                    )
+                                  : ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsetsGeometry.only(top: 10),
+                                          child: ChatingRoom(),
+                                        );
+                                      },
+                                      // TODO API 채팅방 수
+                                      itemCount: 2,
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget ChatingRoom() {
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: EdgeInsetsGeometry.all(10),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '채팅방 이름',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text('채팅방 목록의 대화 내용입니다...'),
+              ],
+            ),
+            Spacer(),
+            // TODO API 시간
+            Text('오후 10:21'),
+          ],
+        ),
+      ),
+    );
+  }
+}
