@@ -135,27 +135,32 @@ class _DialogWidgetState extends State<DialogWidget> {
     );
   }
 
+  List<int> selected = [
+
+  ];
+
   Widget selectePeople(int index) {
-    return Stack(
-      children: [
-        Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: SizedBox(
-                width: 40,
-                height: 40,
-                child: Utils.people('employee${index + 1}', 40),
-              ),
+    return GestureDetector(
+      onTap: (){
+        selected.add(index);
+      },
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: Utils.people('employee${index + 1}', 40),
             ),
-            SizedBox(width: 5),
-            Text(
-              Utils.peopleName[index],
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ],
+          ),
+          SizedBox(width: 5),
+          Text(
+            Utils.peopleName[index],
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
     );
   }
 }
