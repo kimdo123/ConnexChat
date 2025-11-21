@@ -73,6 +73,7 @@ class _DialogWidgetState extends State<DialogWidget> {
                           Expanded(child: SizedBox()),
                           GestureDetector(
                             onTap: () {
+                              Navigator.pop(context);
                               log('Close');
                             },
                             child: Utils.svg('close', 24, Colors.black),
@@ -135,29 +136,52 @@ class _DialogWidgetState extends State<DialogWidget> {
     );
   }
 
-  List<int> selected = [
-
-  ];
+  List<int> selected = [];
 
   Widget selectePeople(int index) {
     return GestureDetector(
-      onTap: (){
-        selected.add(index);
+      onTap: () {
+        if (!selected.contains(index)) {
+          setState(() {
+            selected.add(index);
+            log(selected.toString());
+            log('선택 [$index]');
+          });
+        } else {
+          setState(() {
+            selected.remove(index);
+            log(selected.toString());
+            log('선택 헤제 [$index]');
+          });
+        }
       },
       child: Row(
         children: [
+          SizedBox(width: 5),
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: SizedBox(
-              width: 40,
-              height: 40,
-              child: Utils.people('employee${index + 1}', 40),
+              width: 35,
+              height: 35,
+              child: Stack(
+                children: [
+                  Utils.people('employee${index + 1}', 40),
+                  Container(
+                    color: selected.contains(index)
+                        ? Colors.transparent
+                        : Colors.white.withOpacity(0.6),
+                  ),
+                ],
+              ),
             ),
           ),
-          SizedBox(width: 5),
+
           Text(
             Utils.peopleName[index],
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: selected.contains(index) ? Colors.black : Colors.grey,
+            ),
           ),
         ],
       ),

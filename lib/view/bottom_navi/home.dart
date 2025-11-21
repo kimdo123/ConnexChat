@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
-                    padding: EdgeInsetsGeometry.fromLTRB(30, 30, 0, 0),
+                    padding: EdgeInsetsGeometry.fromLTRB(30, 30, 30, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

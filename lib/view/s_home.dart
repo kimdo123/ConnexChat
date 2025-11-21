@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsetsGeometry.all(20),
         child: Material(
           elevation: 10,
-          shadowColor: Colors.black,
+          shadowColor: Colors.deepPurple,
           borderRadius: BorderRadius.circular(100),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),

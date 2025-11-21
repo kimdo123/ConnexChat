@@ -59,9 +59,10 @@ class _ChatState extends State<Chat> {
                       color: Colors.white,
                     ),
                     child: Align(
-                      alignment: Alignment.topLeft,
+                      alignment: Alignment.topCenter,
                       child: Padding(
-                        padding: EdgeInsetsGeometry.fromLTRB(30, 30, 0, 0),
+                        padding: EdgeInsetsGeometry.all(30),
+                        // padding: EdgeInsetsGeometry.fromLTRB(30, 30, 0, 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -146,8 +147,13 @@ class _ChatState extends State<Chat> {
     return Container(
       height: 70,
       decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(
+          color: Colors.deepPurple.withOpacity(0.4),
+          blurRadius: 5,
+          offset: Offset(0, 1),
+        )]
       ),
       child: Padding(
         padding: EdgeInsetsGeometry.all(10),
@@ -156,6 +162,7 @@ class _ChatState extends State<Chat> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // TODO API 채팅방 이름
                 Text(
                   '채팅방 이름',
                   style: TextStyle(
@@ -163,6 +170,7 @@ class _ChatState extends State<Chat> {
                     fontSize: 16,
                   ),
                 ),
+                // TODO API 채팅방 대화 목록
                 Text('채팅방 목록의 대화 내용입니다...'),
               ],
             ),
