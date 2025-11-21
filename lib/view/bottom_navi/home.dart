@@ -63,7 +63,6 @@ class _HomeState extends State<Home> {
                   child: Padding(
                     padding: EdgeInsetsGeometry.fromLTRB(30, 30, 0, 0),
                     child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -74,7 +73,6 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          width: 300,
                           height: 500,
                           child: ListView.builder(
                             itemBuilder: (context, index) {

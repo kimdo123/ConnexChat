@@ -105,14 +105,13 @@ class _ChatState extends State<Chat> {
                               ],
                             ),
                             SizedBox(
-                              width: 300,
                               height: 500,
                               child: channel
                                   ? ListView.builder(
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: EdgeInsetsGeometry.only(top: 10),
-                                          child: ChatingRoom(),
+                                          child: chatingRoom(),
                                         );
                                       },
                                       // TODO API 채팅방 수
@@ -122,7 +121,7 @@ class _ChatState extends State<Chat> {
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: EdgeInsetsGeometry.only(top: 10),
-                                          child: ChatingRoom(),
+                                          child: chatingRoom(),
                                         );
                                       },
                                       // TODO API 채팅방 수
@@ -143,7 +142,7 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  Widget ChatingRoom() {
+  Widget chatingRoom() {
     return Container(
       height: 70,
       decoration: BoxDecoration(
