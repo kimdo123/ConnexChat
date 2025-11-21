@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/s_popup.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,6 @@ class _ChatState extends State<Chat> {
                     child: Row(
                       children: [
                         SizedBox(width: 10),
-                        // TODO API
                         Text(
                           '채팅방 목록',
                           style: TextStyle(
@@ -41,7 +41,6 @@ class _ChatState extends State<Chat> {
                           ),
                         ),
                         Expanded(child: SizedBox()),
-                        // TODO 다이얼로그
                         GestureDetector(
                           onTap: () => openDialog(context),
                           child: Utils.svg('chat_plus', 30, Colors.white),
@@ -144,40 +143,46 @@ class _ChatState extends State<Chat> {
   }
 
   Widget chatingRoom() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(
-          color: Colors.deepPurple.withOpacity(0.4),
-          blurRadius: 5,
-          offset: Offset(0, 1),
-        )]
-      ),
-      child: Padding(
-        padding: EdgeInsetsGeometry.all(10),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // TODO API 채팅방 이름
-                Text(
-                  '채팅방 이름',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+    return GestureDetector(
+      onTap: (){
+        // TODO API 채팅방
+        log('채팅방 들어가기');
+      },
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [BoxShadow(
+            color: Colors.deepPurple.withOpacity(0.4),
+            blurRadius: 5,
+            offset: Offset(0, 1),
+          )]
+        ),
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(10),
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // TODO API 채팅방 이름
+                  Text(
+                    '채팅방 이름',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                // TODO API 채팅방 대화 목록
-                Text('채팅방 목록의 대화 내용입니다...'),
-              ],
-            ),
-            Spacer(),
-            // TODO API 시간
-            Text('오후 10:21'),
-          ],
+                  // TODO API 채팅방 대화 목록
+                  Text('채팅방 목록의 대화 내용입니다...'),
+                ],
+              ),
+              Spacer(),
+              // TODO API 시간
+              Text('오후 10:21'),
+            ],
+          ),
         ),
       ),
     );

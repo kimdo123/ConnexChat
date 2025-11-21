@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void openDialog(BuildContext context) {
   showDialog(

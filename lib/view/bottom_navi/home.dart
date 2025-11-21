@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     SizedBox(width: 10),
-                    // TODO API
+                    // TODO API 로그인 이름
                     Text(
                       'Competitor1 님',
                       style: TextStyle(
