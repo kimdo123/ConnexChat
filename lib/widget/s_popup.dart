@@ -107,7 +107,8 @@ class _DialogWidgetState extends State<DialogWidget> {
                         child: TextButton(
                           onPressed: () {
                             log('생성하기');
-                          },
+                            Navigator.pop(context);
+                            },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.deepPurple,
                             minimumSize: Size(350, 60),
