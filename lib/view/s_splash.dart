@@ -26,9 +26,12 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
   late final AnimationController controllerBackground;
   late final AnimationController controllerLoop;
 
+  // NEXT 버튼 애니메이션 반복
   bool loop = false;
-
+  // 애니메이션
   double box = 200;
+  // 드래그 위치
+  double dragPosition = 0.0;
 
   @override
   void dispose() {
@@ -251,36 +254,52 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                     SlideTransition(
                       position: animationLoop,
                       child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            '/login',
-                            (route) => false,
-                          );
+                        onVerticalDragUpdate: (details) {
+                          setState(() {
+                            dragPosition += details.primaryDelta ?? 0;
+                            log(dragPosition.toString());
+                            if (dragPosition > 0) {
+                              dragPosition = 0;
+                            } else if (dragPosition < -70) {
+                              dragPosition = -70;
+                            }
+                          });
                         },
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            FadeTransition(
-                              opacity: animationNext,
-                              child: ClipOval(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 60,
-                                  height: 60,
-                                  color: Colors.white,
-                                  child: Text(
-                                    'NEXT',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.deepPurple,
+                        onVerticalDragEnd: (details) {
+                          if (dragPosition < -50) {
+                            Navigator.pushNamed(context, '/login');
+                          } else {
+                            setState(() {
+                              dragPosition = 0.0;
+                            });
+                          }
+                        },
+                        child: Transform.translate(
+                          offset: Offset(0, dragPosition),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              FadeTransition(
+                                opacity: animationNext,
+                                child: ClipOval(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 60,
+                                    height: 60,
+                                    color: Colors.white,
+                                    child: Text(
+                                      'NEXT',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.deepPurple,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
