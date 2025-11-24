@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:connex_chat/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,10 +27,15 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
 
   // NEXT 버튼 애니메이션 반복
   bool loop = false;
+
   // 애니메이션
   double box = 200;
+
   // 드래그 위치
   double dragPosition = 0.0;
+
+  // 로컬 저장 prefs
+  late SharedPreferences prefs;
 
   @override
   void dispose() {
@@ -45,12 +51,30 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    initprefs();
     init();
-    animation();
+    initAnimation();
+  }
+
+  // 로컬 변수 불러오기
+  Future<void> initprefs() async {
+    prefs = await SharedPreferences.getInstance();
+    log('로컬 변수 불러오기');
+
+    // ture 면 login 으로 넘기기
+    final bool = await prefs.getBool('splash_state') ?? false;
+    if (bool) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login',
+        (route) => false,
+      );
+      log('splash 스킵');
+    }
   }
 
   // 에니메이션 시작 함수
-  Future<void> animation() async {
+  Future<void> initAnimation() async {
     // 로고 애니메이션
     controllerLogo.forward().then((value) {
       Future.delayed(Duration(milliseconds: 300), () {
@@ -141,7 +165,6 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // TODO animation 디테일 추가 필요
                 ScaleTransition(
                   scale: animationLogo,
                   child: RotationTransition(
@@ -248,10 +271,12 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                     SlideTransition(
                       position: animationLoop,
                       child: GestureDetector(
+                        // 드래그 시작 했을때
                         onVerticalDragUpdate: (details) {
                           setState(() {
+                            // 드래그 반영
                             dragPosition += details.primaryDelta ?? 0;
-                            log(dragPosition.toString());
+                            // 올릴수 있는 최대치 정하기
                             if (dragPosition > 0) {
                               dragPosition = 0;
                             } else if (dragPosition < -70) {
@@ -259,15 +284,25 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                             }
                           });
                         },
-                        onVerticalDragEnd: (details) {
+                        // 드래그 놨을때
+                        onVerticalDragEnd: (details) async {
+                          // 일정 수치 이상이면 넘어가기
                           if (dragPosition < -50) {
-                            Navigator.pushNamed(context, '/login');
+                            await prefs.setBool('splash_state', true);
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/login',
+                              (route) => false,
+                            );
+                            log('다음부터 splash 스킵');
                           } else {
+                            // 아니면 위치 초기화
                             setState(() {
                               dragPosition = 0.0;
                             });
                           }
                         },
+                        // Transform.translate 위젯으로 드래그 위치 반영
                         child: Transform.translate(
                           offset: Offset(0, dragPosition),
                           child: Stack(
