@@ -1,7 +1,6 @@
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,10 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Row(
                     children: [
-                      SvgPicture.asset(
-                        'assets/logo.svg',
-                        color: Colors.white,
-                      ),
+                      Utils.svg('logo', null, Colors.white),
                       SizedBox(
                         width: 10,
                       ),

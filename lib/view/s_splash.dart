@@ -1,8 +1,6 @@
 import 'dart:developer';
-
-import 'package:flutter/gestures.dart';
+import 'package:connex_chat/utils/util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -148,10 +146,7 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                   scale: animationLogo,
                   child: RotationTransition(
                     turns: animationLogo,
-                    child: SvgPicture.asset(
-                      'assets/logo.svg',
-                      color: Colors.white,
-                    ),
+                    child: Utils.svg('logo', null, Colors.white),
                   ),
                 ),
                 SizedBox(width: 20),
@@ -214,7 +209,6 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                // TODO 이거 왜 ---감?
                                 Colors.white.withOpacity(0.5),
                                 Colors.white.withOpacity(0),
                               ],
@@ -236,15 +230,15 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                           quarterTurns: 1,
                           child: Row(
                             children: [
-                              SvgPicture.asset(
-                                'assets/back.svg',
-                                width: 20,
-                                color: Colors.white.withOpacity(0.5),
+                              Utils.svg(
+                                'back',
+                                20,
+                                Colors.white.withOpacity(0.5),
                               ),
-                              SvgPicture.asset(
-                                'assets/back.svg',
-                                width: 20,
-                                color: Colors.white,
+                              Utils.svg(
+                                'back',
+                                20,
+                                Colors.white,
                               ),
                             ],
                           ),

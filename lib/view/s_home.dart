@@ -3,7 +3,6 @@ import 'package:connex_chat/view/bottom_navi/chat.dart';
 import 'package:connex_chat/view/bottom_navi/home.dart';
 import 'package:connex_chat/view/bottom_navi/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,10 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsetsGeometry.all(20),
-        child: Material(
-          elevation: 10,
-          shadowColor: Colors.black,
-          borderRadius: BorderRadius.circular(100),
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.deepPurple.withOpacity(0.4),
+                blurRadius: 5,
+                offset: Offset(0, 1)
+              ),
+            ],
+            borderRadius: BorderRadius.circular(100)
+          ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: BottomNavigationBar(

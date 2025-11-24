@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Utils {
-  static svg(String name, double size, Color? color) {
+  static svg(String name, double? size, Color? color) {
     return SvgPicture.asset(
       'assets/$name.svg',
       width: size,
