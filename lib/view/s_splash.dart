@@ -116,7 +116,7 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
     animationTitleFade = Tween<double>(
       begin: 0,
       end: 1,
-    ).animate(CurvedAnimation(parent: controllerTitle, curve: Curves.linear));
+    ).animate(CurvedAnimation(parent: controllerTitle, curve: Curves.easeInOut));
     animationTitleOffset =
         Tween<Offset>(
           begin: Offset(0, 1),
@@ -227,7 +227,7 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                     Positioned(
                       bottom: -5,
                       child: FadeTransition(
-                        opacity: controllerBackground,
+                        opacity: animationBackgournd,
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(

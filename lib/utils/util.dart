@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Utils {
   static svg(String name, double? size, Color? color) {
     return SvgPicture.asset(
-      'assets/$name.svg',
+      'assets/svg/$name.svg',
       width: size,
       color: color,
     );
