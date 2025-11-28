@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:connex_chat/utils/util.dart';
-import 'package:connex_chat/widget/s_popup.dart';
+import 'package:connex_chat/widget/w_popup.dart';
 import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
@@ -42,7 +42,10 @@ class _ChatState extends State<Chat> {
                         ),
                         Expanded(child: SizedBox()),
                         GestureDetector(
-                          onTap: () => openDialog(context),
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => DialogWidget(),
+                          ),
                           child: Utils.svg('chat_plus', 30, Colors.white),
                         ),
                       ],
@@ -110,7 +113,9 @@ class _ChatState extends State<Chat> {
                                   ? ListView.builder(
                                       itemBuilder: (context, index) {
                                         return Padding(
-                                          padding: EdgeInsetsGeometry.only(top: 10),
+                                          padding: EdgeInsetsGeometry.only(
+                                            top: 10,
+                                          ),
                                           child: chatingRoom(),
                                         );
                                       },
@@ -120,7 +125,9 @@ class _ChatState extends State<Chat> {
                                   : ListView.builder(
                                       itemBuilder: (context, index) {
                                         return Padding(
-                                          padding: EdgeInsetsGeometry.only(top: 10),
+                                          padding: EdgeInsetsGeometry.only(
+                                            top: 10,
+                                          ),
                                           child: chatingRoom(),
                                         );
                                       },
@@ -144,7 +151,7 @@ class _ChatState extends State<Chat> {
 
   Widget chatingRoom() {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         // TODO API 채팅방
         log('채팅방 들어가기');
       },
@@ -153,11 +160,13 @@ class _ChatState extends State<Chat> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(
-            color: Colors.deepPurple.withOpacity(0.4),
-            blurRadius: 5,
-            offset: Offset(0, 1),
-          )]
+          boxShadow: [
+            BoxShadow(
+              color: Colors.deepPurple.withOpacity(0.4),
+              blurRadius: 5,
+              offset: Offset(0, 1),
+            ),
+          ],
         ),
         child: Padding(
           padding: EdgeInsetsGeometry.all(10),
