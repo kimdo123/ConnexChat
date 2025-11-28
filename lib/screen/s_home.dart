@@ -1,7 +1,10 @@
+import 'dart:developer';
+
+import 'package:connex_chat/controller/api.dart';
 import 'package:connex_chat/utils/util.dart';
-import 'package:connex_chat/view/bottom_navi/chat.dart';
-import 'package:connex_chat/view/bottom_navi/home.dart';
-import 'package:connex_chat/view/bottom_navi/profile.dart';
+import 'package:connex_chat/screen//bottom_navi/chat.dart';
+import 'package:connex_chat/screen/bottom_navi/home.dart';
+import 'package:connex_chat/screen/bottom_navi/profile.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

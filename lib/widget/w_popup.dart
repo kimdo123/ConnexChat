@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:connex_chat/controller/data.dart';
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -166,7 +167,7 @@ class _DialogWidgetState extends State<DialogWidget> {
           ),
 
           Text(
-            Utils.peopleName[index],
+            Data.empList[index].name,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: selected.contains(index) ? Colors.black : Colors.grey,

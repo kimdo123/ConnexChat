@@ -1,6 +1,6 @@
-import 'package:connex_chat/view/s_home.dart';
-import 'package:connex_chat/view/s_login.dart';
-import 'package:connex_chat/view/s_splash.dart';
+import 'package:connex_chat/screen/s_home.dart';
+import 'package:connex_chat/screen/s_login.dart';
+import 'package:connex_chat/screen/s_splash.dart';
 import 'package:flutter/material.dart';
 
 void main() {

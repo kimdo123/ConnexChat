@@ -1,3 +1,4 @@
+import 'package:connex_chat/controller/api.dart';
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +131,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () => Navigator.pushNamed(context, '/home'),
+          onTap: () async {
+            final isPass = await Auth.login(email, password);
+            if (isPass) {
+              Navigator.pushNamed(context, '/home');
+              // TODO prefs써서 splash 처럼
+            }
+          },
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(width: 2, color: Colors.deepPurple),
@@ -178,8 +185,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void showSnackBar(String text, context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(text))
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 }

@@ -29,6 +29,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       ),
       child: TextFormField(
         key: key,
+        controller: widget.controller,
         keyboardType: widget.label == '이메일을 입력해주세요'
             ? TextInputType.emailAddress
             : TextInputType.text,
