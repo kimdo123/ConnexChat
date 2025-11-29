@@ -50,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: BottomNavigationBar(
               backgroundColor: Colors.white,
               currentIndex: _selectedIdx,
-              type: BottomNavigationBarType.fixed,
               onTap: (index) {
                 setState(() {
                   _selectedIdx = index;

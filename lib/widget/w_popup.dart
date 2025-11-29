@@ -1,8 +1,11 @@
 import 'dart:developer';
+import 'package:connex_chat/controller/api.dart';
 import 'package:connex_chat/controller/data.dart';
+import 'package:connex_chat/screen/bottom_navi/chat.dart';
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DialogWidget extends StatefulWidget {
   const DialogWidget({
@@ -15,20 +18,26 @@ class DialogWidget extends StatefulWidget {
 
 class _DialogWidgetState extends State<DialogWidget> {
   // 변수 --------------
-  late TextEditingController sectionTitleController;
-  late TextEditingController chatTitleController;
+  late TextEditingController sectionController;
+  late TextEditingController titleController;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
     super.initState();
-    sectionTitleController = TextEditingController();
-    chatTitleController = TextEditingController();
+    sectionController = TextEditingController();
+    titleController = TextEditingController();
+    init();
+  }
+
+  Future<void> init() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
   void dispose() {
-    sectionTitleController.dispose();
-    chatTitleController.dispose();
+    sectionController.dispose();
+    titleController.dispose();
     super.dispose();
   }
 
@@ -63,7 +72,7 @@ class _DialogWidgetState extends State<DialogWidget> {
                         Expanded(child: SizedBox()),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                             log('Close');
                           },
                           child: Utils.svg('close', 24, Colors.black),
@@ -73,12 +82,12 @@ class _DialogWidgetState extends State<DialogWidget> {
                     SizedBox(height: 20),
                     CustomTextFormField(
                       label: '색션 이름을 입력해 주세요',
-                      controller: sectionTitleController,
+                      controller: sectionController,
                     ),
                     SizedBox(height: 10),
                     CustomTextFormField(
                       label: '채팅방 이름을 입력해주세요',
-                      controller: chatTitleController,
+                      controller: titleController,
                     ),
                     SizedBox(height: 20),
                     SizedBox(
@@ -96,9 +105,21 @@ class _DialogWidgetState extends State<DialogWidget> {
                     SizedBox(height: 20),
                     SizedBox(
                       child: TextButton(
-                        onPressed: () {
-                          log('생성하기');
-                          Navigator.pop(context);
+                        onPressed: () async {
+                          final bool = await Auth.postCreatChat(
+                            titleController,
+                            selected,
+                            prefs.getString('token').toString(),
+                          );
+                          if (bool) {
+                            Navigator.pop(context, true);
+                            Data.allChatList.add(
+                              ChatRoomWidget(
+                                roomname: titleController.text,
+                              ),
+                            );
+                            log('채팅방 생성 완료');
+                          }
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.deepPurple,

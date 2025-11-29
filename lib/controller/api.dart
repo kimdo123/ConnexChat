@@ -6,12 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
 final String baseUrl = 'http://arkenzo.dothome.co.kr/connexchat';
-final headers = {
-  'Content-type': 'application/json',
-};
+final headers = {'Content-type': 'application/json'};
 
 late String token;
-late final String profileName;
+late String username;
 
 class Auth {
   static Future<bool> login(
@@ -28,14 +26,23 @@ class Auth {
     );
     log(jsonDecode(res.body).toString());
     token = jsonDecode(res.body)['data']['token'].toString();
-    profileName = jsonDecode(res.body)['data']['name'].toString();
     return jsonDecode(res.body)['success'];
   }
 
-
-  static Future<void> getEmpList() async {
+  static Future<void> getUserinfo(prefsToken) async {
     final headersWithToken = headers;
-    headersWithToken['Authorization'] = 'Bearer $token';
+    headersWithToken['Authorization'] = 'Bearer $prefsToken';
+    final res = await get(
+      Uri.parse('$baseUrl/users/me'),
+      headers: headersWithToken,
+    );
+    log('정보 조회 : ${jsonDecode(res.body).toString()}');
+    username = jsonDecode(res.body)['data']['name'];
+  }
+
+  static Future<void> getEmpList(prefsToken) async {
+    final headersWithToken = headers;
+    headersWithToken['Authorization'] = 'Bearer $prefsToken';
     final res = await get(
       Uri.parse('$baseUrl/employees'),
       headers: headersWithToken,
@@ -46,5 +53,38 @@ class Auth {
       res.body,
     )['data'].map<EmpListModel>((e) => EmpListModel.fromJson(e)).toList();
     log('최종 getEmpList : ${Data.empList.toString()}');
+  }
+
+  static Future<bool> postCreatChat(
+    TextEditingController title,
+    List<int> list,
+    String prefsToken,
+  ) async {
+    final headersWithToken = headers;
+    headersWithToken['Authorization'] = 'Bearer $prefsToken';
+    final res = await post(
+      Uri.parse('$baseUrl/chatrooms/create'),
+      headers: headersWithToken,
+      body: jsonEncode({
+        'roomName': title.text,
+        'participants': list,
+      }),
+    );
+    log('채팅방 생성 : ${jsonDecode(res.body).toString()}');
+    if (jsonDecode(res.body)['success']) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<void> getMessagesInt(prefsToken) async {
+    final headersWithToken = headers;
+    headersWithToken['Authorization'] = 'Bearer $prefsToken';
+    final res = await get(
+      Uri.parse('$baseUrl/messages/unread'),
+      headers: headersWithToken,
+    );
+    Data.chatInt = jsonDecode(res.body)['data']['totalCount'];
   }
 }

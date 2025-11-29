@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:connex_chat/controller/data.dart';
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/w_popup.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  bool channel = true;
+  int channel = 0;
+  bool? result = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +39,24 @@ class _ChatState extends State<Chat> {
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 24,
                           ),
                         ),
                         Expanded(child: SizedBox()),
                         GestureDetector(
-                          onTap: () => showDialog(
-                            context: context,
-                            builder: (context) => DialogWidget(),
-                          ),
+                          onTap: () async {
+                            // await 해서 pop 할때 true false 값 받기
+                            result = await showDialog(
+                              context: context,
+                              builder: (context) => DialogWidget(),
+                            );
+                            if (result ?? false) {
+                              setState(() {
+                                // 데이터 전체를 바꾸면 새로고침 해줌.
+                                Data.allChatList = List.from(Data.allChatList);
+                              });
+                            }
+                          },
                           child: Utils.svg('chat_plus', 30, Colors.white),
                         ),
                       ],
@@ -64,7 +75,6 @@ class _ChatState extends State<Chat> {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: EdgeInsetsGeometry.all(30),
-                        // padding: EdgeInsetsGeometry.fromLTRB(30, 30, 0, 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -74,15 +84,15 @@ class _ChatState extends State<Chat> {
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      channel = !channel;
+                                      channel = 0;
                                     });
                                   },
                                   child: Text(
-                                    '사내 전체 공지',
+                                    '즐겨찾기',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
-                                      color: channel
+                                      color: channel == 0
                                           ? Colors.deepPurple
                                           : Colors.black,
                                     ),
@@ -91,7 +101,24 @@ class _ChatState extends State<Chat> {
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      channel = !channel;
+                                      channel = 1;
+                                    });
+                                  },
+                                  child: Text(
+                                    '사내 전체 공지',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: channel == 1
+                                          ? Colors.deepPurple
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      channel = 2;
                                     });
                                   },
                                   child: Text(
@@ -99,9 +126,9 @@ class _ChatState extends State<Chat> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
-                                      color: channel
-                                          ? Colors.black
-                                          : Colors.deepPurple,
+                                      color: channel == 2
+                                          ? Colors.deepPurple
+                                          : Colors.black,
                                     ),
                                   ),
                                 ),
@@ -109,31 +136,11 @@ class _ChatState extends State<Chat> {
                             ),
                             SizedBox(
                               height: 500,
-                              child: channel
-                                  ? ListView.builder(
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: EdgeInsetsGeometry.only(
-                                            top: 10,
-                                          ),
-                                          child: chatingRoom(),
-                                        );
-                                      },
-                                      // TODO API 채팅방 수
-                                      itemCount: 5,
-                                    )
-                                  : ListView.builder(
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: EdgeInsetsGeometry.only(
-                                            top: 10,
-                                          ),
-                                          child: chatingRoom(),
-                                        );
-                                      },
-                                      // TODO API 채팅방 수
-                                      itemCount: 2,
-                                    ),
+                              child: [
+                                ListView(children: Data.bookmarkChatList),
+                                ListView(children: Data.allChatList),
+                                ListView(children: Data.developmentChatList),
+                              ][channel],
                             ),
                           ],
                         ),
@@ -148,49 +155,64 @@ class _ChatState extends State<Chat> {
       ),
     );
   }
+}
 
-  Widget chatingRoom() {
-    return GestureDetector(
-      onTap: () {
-        // TODO API 채팅방
-        log('채팅방 들어가기');
-      },
-      child: Container(
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.deepPurple.withOpacity(0.4),
-              blurRadius: 5,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsetsGeometry.all(10),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // TODO API 채팅방 이름
-                  Text(
-                    '채팅방 이름',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  // TODO API 채팅방 대화 목록
-                  Text('채팅방 목록의 대화 내용입니다...'),
-                ],
+class ChatRoomWidget extends StatelessWidget {
+  final String? roomname;
+
+  const ChatRoomWidget({
+    super.key,
+    this.roomname,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: GestureDetector(
+        onTap: () {
+          // TODO API 채팅방
+          log('채팅방 들어가기');
+        },
+        child: Container(
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.deepPurple.withOpacity(0.4),
+                blurRadius: 5,
+                offset: Offset(0, 1),
               ),
-              Spacer(),
-              // TODO API 시간
-              Text('오후 10:21'),
             ],
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // TODO API 채팅방 이름
+                    Text(
+                      roomname ?? '채팅방 이름',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    // TODO API 채팅방 대화 목록
+                    Text('채팅방 목록의 대화 내용입니다...'),
+                  ],
+                ),
+                Spacer(),
+                // TODO API 시간
+                Text('오후 10:21'),
+                SizedBox(width: 10),
+                Utils.svg('bookmark_outline', 24, Colors.deepPurple)
+              ],
+            ),
           ),
         ),
       ),

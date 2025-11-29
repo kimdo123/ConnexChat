@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:connex_chat/controller/api.dart';
 import 'package:connex_chat/utils/util.dart';
 import 'package:connex_chat/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,13 +17,20 @@ class _LoginScreenState extends State<LoginScreen> {
   // 변수 -------------------------------------
   late TextEditingController email;
   late TextEditingController password;
+  late bool loginState;
+  late SharedPreferences prefs;
 
   // init ------------------------------------
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  Future<void> init() async {
     email = TextEditingController();
     password = TextEditingController();
+    prefs = await SharedPreferences.getInstance();
   }
 
   // dispose ------------------------------------
@@ -132,10 +142,19 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         GestureDetector(
           onTap: () async {
+            // 로그인 요청
             final isPass = await Auth.login(email, password);
+            // 로그인 성공시
             if (isPass) {
+              // 토큰 저장
+              prefs.setString('token', token);
+              // 토큰 가져와서 정보 가져오기
+              await Auth.getUserinfo(prefs.getString('token'));
+              // 정보> 이름 설정
+              prefs.setString('username', username);
+              // 로그인 된 상태 저장
+              prefs.setBool('isLoginPassed', true);
               Navigator.pushNamed(context, '/home');
-              // TODO prefs써서 splash 처럼
             }
           },
           child: Container(

@@ -27,5 +27,4 @@ class EmpListModel {
   String toString() {
     return 'EmpListModel{id: $id, name: $name, department: $department, position: $position}';
   }
-
 }

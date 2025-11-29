@@ -59,18 +59,7 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
   // 로컬 변수 불러오기
   Future<void> initprefs() async {
     prefs = await SharedPreferences.getInstance();
-    log('로컬 변수 불러오기');
-
-    // ture 면 login 으로 넘기기
-    final bool = await prefs.getBool('splash_state') ?? false;
-    if (bool) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/login',
-        (route) => false,
-      );
-      log('splash 스킵');
-    }
+    // log('로컬 변수 불러오기');
   }
 
   // 에니메이션 시작 함수
@@ -288,7 +277,7 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
                         onVerticalDragEnd: (details) async {
                           // 일정 수치 이상이면 넘어가기
                           if (dragPosition < -50) {
-                            await prefs.setBool('splash_state', true);
+                            prefs.setBool('isSplashPassed', true);
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/login',
