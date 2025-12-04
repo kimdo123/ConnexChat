@@ -27,7 +27,7 @@ class UserController {
     }
   }
 
-  static Future<void> getUserinfo(prefsToken) async {
+  static Future<void> getUserinfo(String prefsToken) async {
     final headersWithToken = API_HEADERS;
     headersWithToken['Authorization'] = 'Bearer $prefsToken';
     final res = await get(

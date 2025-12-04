@@ -1,3 +1,4 @@
+import 'package:connex_chat/views/chat/s_chating_room.dart';
 import 'package:connex_chat/views/common/w_bottom_navi.dart';
 import 'package:connex_chat/views/entry/s_login.dart';
 import 'package:connex_chat/views/entry/s_splash.dart';
@@ -21,6 +22,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/splash',
       routes: {
+        '/chatting_room': (context) => ChattingRoomScreen(),
         '/splash': (context) => SplashScreen(),
         '/login': (context) => LoginScreen(),
         '/home': (context) => BottomNavi(),

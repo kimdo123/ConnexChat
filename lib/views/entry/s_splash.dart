@@ -67,12 +67,10 @@ class _SplashState extends State<SplashScreen> with TickerProviderStateMixin {
     // 로고 애니메이션
     controllerLogo.forward().then((value) {
       Future.delayed(Duration(milliseconds: 300), () {
-        log('animationLOGO complite');
         // Connex Chat 애니메이션
         setState(() {
           box = 0;
         });
-        log('animation ConnexChat comlite');
         // 브랜드 메세지 애니메이션
         Future.delayed(Duration(seconds: 1), () {
           controllerTitle.forward().then((value) {

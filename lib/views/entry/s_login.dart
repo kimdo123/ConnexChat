@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // 토큰 저장
                 prefs.setString('token', token);
                 // 토큰 가져와서 정보 가져오기
-                await UserController.getUserinfo(prefs.getString('token'));
+                await UserController.getUserinfo(prefs.getString('token').toString());
                 // 정보> 이름 설정
                 prefs.setString('username', username);
                 // 로그인 된 상태 저장

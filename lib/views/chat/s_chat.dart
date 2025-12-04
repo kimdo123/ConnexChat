@@ -1,4 +1,5 @@
 import 'package:connex_chat/views/chat/w_dialog.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../app/core.dart';
 import '../../app/utils.dart';
@@ -140,8 +141,17 @@ class _ChatScreenState extends State<ChatScreen> {
                             SizedBox(
                               height: 500,
                               child: [
-                                ListView(children: bookmarkChatList),
-                                ListView(children: allChatList),
+                                ListView.builder(
+                                  itemBuilder: (context, index) =>
+                                      bookmarkChatList[index],
+                                  itemCount: bookmarkChatList.length,
+                                ),
+                                ListView.builder(
+                                  itemBuilder: (context, index) =>
+                                      allChatList[index],
+                                  itemCount: allChatList.length,
+                                ),
+                                // TODO 삭제
                                 ListView(children: developmentChatList),
                               ][channel],
                             ),
@@ -162,10 +172,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class ChatRoomWidget extends StatelessWidget {
   final String? roomname;
+  final VoidCallback isBookmark;
 
   const ChatRoomWidget({
     super.key,
     this.roomname,
+    required this.isBookmark,
   });
 
   @override
@@ -176,6 +188,7 @@ class ChatRoomWidget extends StatelessWidget {
         onTap: () {
           // TODO API 채팅방
           log('채팅방 들어가기');
+          Navigator.pushNamed(context, '/chatting_room');
         },
         child: Container(
           height: 70,
@@ -213,7 +226,18 @@ class ChatRoomWidget extends StatelessWidget {
                 // TODO API 시간
                 Text('오후 10:21'),
                 SizedBox(width: 10),
-                Utils.svgFromAsset('bookmark_outline', 24, Colors.deepPurple),
+                GestureDetector(
+                  onTap: () {
+                    isBookmark();
+                    bookmarkChatList.add(allChatList[index]);
+                    log('즐겨찾기');
+                  },
+                  child: Utils.svgFromAsset(
+                    'bookmark_outline',
+                    24,
+                    Colors.deepPurple,
+                  ),
+                ),
               ],
             ),
           ),

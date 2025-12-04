@@ -1,4 +1,5 @@
 import '../models/dto_user.dart';
+import '../views/chat/s_chat.dart';
 import 'core.dart';
 
 String token = '';

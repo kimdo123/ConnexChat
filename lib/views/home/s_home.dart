@@ -1,5 +1,6 @@
 import 'package:connex_chat/app/utils.dart';
 import 'package:connex_chat/controllers/c_user.dart';
+import 'package:connex_chat/views/chat/s_chat.dart';
 
 import '../../app/core.dart';
 
@@ -21,9 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
-    await UserController.getEmpList(prefs.getString('token'));
-    await UserController.getUserinfo(prefs.getString('token'));
-    await UserController.getMessagesInt(prefs.getString('token'));
+    await UserController.getEmpList(prefs.getString('token').toString());
+    await UserController.getUserinfo(prefs.getString('token').toString());
+    await UserController.getMessagesInt(prefs.getString('token').toString());
   }
 
   @override
@@ -92,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // TODO API 대화 갯수
                                     Text(
                                       '읽지 않은 대화가 $chatInt개 있어요!',
                                       style: TextStyle(
@@ -102,13 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     SizedBox(
                                       height: 100,
-                                      child: ListView(
+                                      child: ListView.builder(
+                                        itemBuilder: (context, index) => chatCard(),
+                                        itemCount: chatInt,
                                         scrollDirection: Axis.horizontal,
-                                        children: [
-                                          chatCard(),
-                                          chatCard(),
-                                          chatCard(),
-                                        ],
                                       ),
                                     ),
                                   ],
