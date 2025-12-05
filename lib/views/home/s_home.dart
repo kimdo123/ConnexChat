@@ -44,14 +44,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: MediaQuery.of(context).size.width,
                     height: 100,
                     child: Padding(
-                      padding: EdgeInsetsGeometry.all(20),
+                      padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
                           ClipOval(
                             child: Container(
                               color: Colors.white,
                               child: Padding(
-                                padding: EdgeInsetsGeometry.all(5),
+                                padding: EdgeInsets.all(5),
                                 child: Utils.svgFromAsset(
                                   'person_fill',
                                   40,
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsetsGeometry.fromLTRB(30, 30, 0, 0),
+                          padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -103,7 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SizedBox(
                                       height: 100,
                                       child: ListView.builder(
-                                        itemBuilder: (context, index) => chatCard(),
+                                        itemBuilder: (context, index) =>
+                                            chatCard(),
                                         itemCount: chatInt,
                                         scrollDirection: Axis.horizontal,
                                       ),
@@ -123,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: ListView.builder(
                                   itemBuilder: (context, index) {
                                     return Padding(
-                                      padding: EdgeInsetsGeometry.only(top: 10),
+                                      padding: EdgeInsets.only(top: 10),
                                       child: Row(
                                         children: [
                                           SizedBox(

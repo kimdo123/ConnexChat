@@ -6,7 +6,16 @@ String token = '';
 String username = '';
 
 List<EmpListDTO> empList = [];
-List<Widget> bookmarkChatList = [];
-List<Widget> allChatList = [];
+
+Map<String, bool> allChatRoomMap = {
+  "공지방1": false,
+  "공지방2": true,
+  "공지방3": false,
+};
+
+// 전체 채팅방 (전체공지) 이름들
+late List<String>allRooms;
+
 List<Widget> developmentChatList = [];
+
 int chatInt = 0;

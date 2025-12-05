@@ -30,7 +30,7 @@ class _BottomNaviState extends State<BottomNavi> {
         children: _page,
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsetsGeometry.all(20),
+        padding: EdgeInsets.all(20),
         child: Container(
           decoration: BoxDecoration(
               boxShadow: [

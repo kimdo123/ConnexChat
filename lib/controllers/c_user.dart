@@ -64,7 +64,7 @@ class UserController {
   }
 
   static Future<bool> postCreatChat(
-    TextEditingController title,
+    String title,
     List<int> list,
     String prefsToken,
   ) async {
@@ -74,7 +74,7 @@ class UserController {
       Uri.parse('$API_URL/chatrooms/create'),
       headers: headersWithToken,
       body: jsonEncode({
-        'roomName': title.text,
+        'roomName': title,
         'participants': list,
       }),
     );

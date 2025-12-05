@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             height: 250,
             child: Padding(
-              padding: EdgeInsetsGeometry.fromLTRB(20, 50, 20, 0),
+              padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsetsGeometry.fromLTRB(30, 30, 30, 0),
+                  padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
                   child: Form(
                     key: formKey,
                     child: Column(

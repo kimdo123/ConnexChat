@@ -1,20 +1,19 @@
 import 'package:connex_chat/controllers/c_user.dart';
-import 'package:connex_chat/views/chat/s_chat.dart';
 import 'package:connex_chat/views/common/w_custom_text_field.dart';
 
 import '../../app/core.dart';
 import '../../app/utils.dart';
 
-class DialogWidget extends StatefulWidget {
-  const DialogWidget({
+class CreateChatDialogWidget extends StatefulWidget {
+  const CreateChatDialogWidget({
     super.key,
   });
 
   @override
-  State<DialogWidget> createState() => _DialogWidgetState();
+  State<CreateChatDialogWidget> createState() => _CreateChatDialogWidgetState();
 }
 
-class _DialogWidgetState extends State<DialogWidget> {
+class _CreateChatDialogWidgetState extends State<CreateChatDialogWidget> {
   // 변수 --------------
   late TextEditingController sectionController;
   late TextEditingController titleController;
@@ -54,7 +53,7 @@ class _DialogWidgetState extends State<DialogWidget> {
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(vertical: 4),
               child: Padding(
-                padding: EdgeInsetsGeometry.all(20),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -70,8 +69,8 @@ class _DialogWidgetState extends State<DialogWidget> {
                         Expanded(child: SizedBox()),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pop(context, true);
-                            log('Close');
+                            Navigator.pop(context);
+                            log('엑스 버튼 클릭');
                           },
                           child: Utils.svgFromAsset('close', 24, Colors.black),
                         ),
@@ -91,6 +90,7 @@ class _DialogWidgetState extends State<DialogWidget> {
                     SizedBox(
                       width: 350,
                       height: 40,
+                      // .separated : ListView 아이템들 간격 설정
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         separatorBuilder: (_, index) => SizedBox(width: 10),
@@ -104,19 +104,17 @@ class _DialogWidgetState extends State<DialogWidget> {
                     SizedBox(
                       child: TextButton(
                         onPressed: () async {
-                          final bool = await UserController.postCreatChat(
-                            titleController,
-                            selected,
-                            prefs.getString('token').toString(),
-                          );
-                          if (bool) {
-                            Navigator.pop(context, true);
-                            allChatList.add(
-                              ChatRoomWidget(
-                                roomname: titleController.text,
-                              ),
-                            );
+                          final isSuccessed =
+                              await UserController.postCreatChat(
+                                titleController.text,
+                                selected,
+                                prefs.getString('token').toString(),
+                              );
+                          if (isSuccessed) {
+                            Navigator.pop(context, titleController.text);
                             log('채팅방 생성 완료');
+                          } else {
+                            log('채팅방 생성 실패');
                           }
                         },
                         style: TextButton.styleFrom(

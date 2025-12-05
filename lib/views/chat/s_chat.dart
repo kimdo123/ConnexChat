@@ -1,4 +1,5 @@
-import 'package:connex_chat/views/chat/w_dialog.dart';
+import 'package:connex_chat/views/chat/w_create_chat_dialog.dart';
+import 'package:connex_chat/views/chat/w_edit_chat_dialog.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../app/core.dart';
@@ -17,6 +18,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    allRooms = allChatRoomMap.keys.toList();
+    // 전체 중에 즐겨찾기 된거 찾기
+    // .entries : Map에 (key,value) 하나씩 꺼내기
+    // .where : (key,value) 받아서 value 가 true인지 확인
+    // .map : true 면 key(방이름) 가져오기
+    final bookMarkRooms = allChatRoomMap.entries
+        .where((e) => e.value == true)
+        .map((e) => e.key)
+        .toList();
     return Scaffold(
       backgroundColor: Colors.deepPurple,
       body: SafeArea(
@@ -30,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   width: MediaQuery.of(context).size.width,
                   height: 100,
                   child: Padding(
-                    padding: EdgeInsetsGeometry.all(20),
+                    padding: EdgeInsets.all(20),
                     child: Row(
                       children: [
                         SizedBox(width: 10),
@@ -45,17 +55,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         Expanded(child: SizedBox()),
                         GestureDetector(
                           onTap: () async {
-                            // await 해서 pop 할때 true false 값 받기
-                            result = await showDialog(
+                            // await 해서 pop 할때 넘어오는 값 받기
+                            String? result = await showDialog(
                               context: context,
-                              builder: (context) => DialogWidget(),
+                              builder: (context) => CreateChatDialogWidget(),
                             );
-                            if (result ?? false) {
-                              setState(() {
-                                // 데이터 전체를 바꾸면 새로고침 해줌.
-                                allChatList = List.from(allChatList);
-                              });
+                            if (result != null) {
+                              allChatRoomMap[result] = false;
+                              setState(() {});
                             }
+                            // TODO 채팅방 생성하기
                           },
                           child: Utils.svgFromAsset(
                             'chat_plus',
@@ -78,78 +87,45 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Padding(
-                        padding: EdgeInsetsGeometry.all(30),
+                        padding: EdgeInsets.all(30),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               spacing: 10,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      channel = 0;
-                                    });
-                                  },
-                                  child: Text(
-                                    '즐겨찾기',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: channel == 0
-                                          ? Colors.deepPurple
-                                          : Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      channel = 1;
-                                    });
-                                  },
-                                  child: Text(
-                                    '사내 전체 공지',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: channel == 1
-                                          ? Colors.deepPurple
-                                          : Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      channel = 2;
-                                    });
-                                  },
-                                  child: Text(
-                                    '개발팀',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: channel == 2
-                                          ? Colors.deepPurple
-                                          : Colors.black,
-                                    ),
-                                  ),
-                                ),
+                                _sectionTap(0, '즐겨찾기'),
+                                _sectionTap(1, '사내 전체 공지'),
+                                _sectionTap(2, '개발팀'),
                               ],
                             ),
                             SizedBox(
                               height: 500,
                               child: [
+                                // 즐겨찾기 채팅 방
                                 ListView.builder(
-                                  itemBuilder: (context, index) =>
-                                      bookmarkChatList[index],
-                                  itemCount: bookmarkChatList.length,
+                                  itemBuilder: (context, index) {
+                                    return ChatRoomWidget(
+                                      roomname: bookMarkRooms[index],
+                                      isBookmarked: true,
+                                      toggleBookmark: toggleBookmark,
+                                    );
+                                  },
+                                  itemCount: bookMarkRooms.length,
                                 ),
+
+                                // 전체 채팅 방
                                 ListView.builder(
-                                  itemBuilder: (context, index) =>
-                                      allChatList[index],
-                                  itemCount: allChatList.length,
+                                  itemBuilder: (context, index) {
+                                    final roomnameList = allRooms[index];
+                                    return ChatRoomWidget(
+                                      roomname: allRooms[index],
+                                      isBookmarked:
+                                          allChatRoomMap[roomnameList]!,
+                                      toggleBookmark: toggleBookmark,
+                                    );
+                                  },
+                                  itemCount: allRooms.length,
                                 ),
                                 // TODO 삭제
                                 ListView(children: developmentChatList),
@@ -168,25 +144,72 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
+  Widget _sectionTap(int index, String title) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          channel = index;
+        });
+      },
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          color: channel == index ? Colors.deepPurple : Colors.black,
+        ),
+      ),
+    );
+  }
+
+  void toggleBookmark(String roomname) {
+    allChatRoomMap[roomname] = !(allChatRoomMap[roomname]!);
+    setState(() {});
+  }
 }
 
-class ChatRoomWidget extends StatelessWidget {
+class ChatRoomWidget extends StatefulWidget {
   final String? roomname;
-  final VoidCallback isBookmark;
+  final bool isBookmarked;
+  final Function toggleBookmark;
 
   const ChatRoomWidget({
     super.key,
     this.roomname,
-    required this.isBookmark,
+    required this.isBookmarked,
+    required this.toggleBookmark,
   });
 
+  @override
+  State<ChatRoomWidget> createState() => _ChatRoomWidgetState();
+}
+
+class _ChatRoomWidgetState extends State<ChatRoomWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 10),
       child: GestureDetector(
+        // 채팅방 수정
+        onLongPress: () async {
+          log('채팅방 수정');
+          final bool? isEdited = await showDialog(
+            context: context,
+            builder: (context) => EditChatDialogWidget(
+              roomname: widget.roomname ?? '채팅방 이름',
+            ),
+          );
+          if (isEdited != null && isEdited) {
+            allChatRoomMap.remove(widget.roomname);
+            Navigator.pop(context);
+          } else {
+            log('채팅방이 삭제되지 않음');
+          }
+        },
+        // 채팅방 들어가기
         onTap: () {
-          // TODO API 채팅방
+          // TODO API 채팅방 입장
           log('채팅방 들어가기');
           Navigator.pushNamed(context, '/chatting_room');
         },
@@ -210,30 +233,29 @@ class ChatRoomWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // TODO API 채팅방 이름
                     Text(
-                      roomname ?? '채팅방 이름',
+                      widget.roomname ?? '채팅방 이름',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
-                    // TODO API 채팅방 대화 목록
                     Text('채팅방 목록의 대화 내용입니다...'),
                   ],
                 ),
                 Spacer(),
-                // TODO API 시간
                 Text('오후 10:21'),
                 SizedBox(width: 10),
                 GestureDetector(
                   onTap: () {
-                    isBookmark();
-                    bookmarkChatList.add(allChatList[index]);
                     log('즐겨찾기');
+                    widget.toggleBookmark(widget.roomname);
+                    setState(() {});
                   },
                   child: Utils.svgFromAsset(
-                    'bookmark_outline',
+                    widget.isBookmarked == true
+                        ? 'bookmark_fill'
+                        : 'bookmark_outline',
                     24,
                     Colors.deepPurple,
                   ),
